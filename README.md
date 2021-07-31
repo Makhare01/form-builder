@@ -17,7 +17,7 @@ The ability to work with forms is an important skill. In this task we'll try to 
 
 As a result, you will have an application that renders a form described completely by the JSON schema and saves the submitted results in the database.
 
-## Task
+## Task #1
 
 You need to implement a `FormBuilder` component that accepts two properties:
 ```ts
@@ -41,13 +41,43 @@ After the component is implemented and the `onSubmit` function returns an object
 
 The last step is to use [Firebase Hosting](https://firebase.google.com/products/hosting) to deploy the application.
 
+## Task #2
+
+You need to implement a functionality that parses the user's input (left side) to the `ObjectSchema` and automatically generates the form based on the user's input (right side).
+
+There are two types of validations that must take place:
+1. Check that `jsonInput` is a valid json.
+2. Check that it matches the schema described by the `ObjectSchema` type. This step is called "Runtime data validation".
+
+You must handle both types of errors and show the corresponding messages to the user. You may notice that on the screenshot there's a message `Expecting "object" at 0.type but instead got "WTF??"`. This is a very descriptive message telling where exactly the error occurred (first array element, `type` property). To achieve this validation, I used a 3-rd party library because making a custom runtime validator is not a trivial task. You **don't have** to show the error the same way I did, but the more descriptive the message is, the better.
+
+I've prepared two pre-defined schemas for you (see `student-profile.json` and `test.json`). It's important to understand that the form builder should build the form for **any valid schema**.
+
+## Additional requirements
+
+- The value of the `boolean` property should be `"on"` if checkbox is checked and `"off"` if it's unchecked. Consider using a hidden input to achieve this behavior.
+- If the `array` property is marked as `required`, make sure that the user cannot remove a single item (for example you can hide the "Remove" button).
+- The application should build a form right after the user provides any changes in the input JSON. It should be an immediate reaction.
+- Both types of input errors are handled and the error messages are displayed to the user.
+
+## Acceptance criteria
+
+- The `FormBuilder` component renders a form for *any valid* `schema` with the maximum nesting depth of 5.
+- Each time the form is submitted, the values are saved to the Firestore.
+- The website is hosted by the Firebase Hosting service.
+- The form is user-friendly and accessible enough.
+- The output JSON is not flat: it contains primitive types as well as objects and arrays.
+
 ## Screenshots of a finished solution (EXAMPLE)
 
-![Empty form](./resources/empty.png)
-![Filled form](./resources/filled.png)
-![Result JSON](./resources/result.png)
+![Student profile](./resources/student-profile.png)
+![Test 1](./resources/test-1.png)
+![Test 2](./resources/test-2.png)
+![Test result](./resources/test-result.png)
+![Invalid JSON](./resources/invalid-json.png)
+![Invalid schema](./resources/invalid-schema.png)
 
-## Output JSON after the `student-profile` form is submitted
+## Output JSON after the `student-profile` form is submitted (EXAMPLE)
 
 ```json
 {
@@ -182,14 +212,6 @@ Please do not modify the following files:
   - Connecting to the database and hosting should be the last steps.
 - Feel free to mark all fields as optional during the development phase to be able to submit the form without filling all the fields every time.
 - Remember that the schema is recursive. The object can be nested in the object up to 5 times (artificial limitation).
-
-## Acceptance criteria
-
-- The `FormBuilder` component renders a form for *any valid* `schema` with the maximum nesting depth of 5.
-- Each time the form is submitted, the values are saved to the Firestore.
-- The website is hosted by the Firebase Hosting service.
-- The form is user-friendly and accessible enough.
-- The output JSON is not flat: it contains primitive types as well as objects and arrays.
 
 ## Rules (IMPORTANT)
 

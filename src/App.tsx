@@ -1,67 +1,39 @@
-import {
-  Box,
-  Container,
-  createTheme,
-  CssBaseline,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  MuiThemeProvider,
-  Paper,
-} from '@material-ui/core'
 import { FormBuilder } from 'lib/form-builder'
 import { useState } from 'react'
+import { Layout } from 'Layout'
 import { studentProfileSchema } from 'schemas/student-profile'
-import ReactJson from 'react-json-view'
-
-const theme = createTheme({
-  props: {
-    MuiTextField: {
-      variant: 'outlined',
-      margin: 'dense',
-    },
-    MuiFormControl: {
-      variant: 'outlined',
-      margin: 'dense',
-    },
-  },
-})
+import { ResultDialog } from 'ResultDialog'
 
 export const App = () => {
   const [submittedData, setSubmittedData] = useState<any>(null)
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container maxWidth="sm">
-        <Box p={2}>
-          <Paper>
+    <Layout
+      render={jsonInput => {
+        // `jsonInput` is a raw string. You need to convert it to the object of `ObjectSchema` type.
+        // There are two types of validations that must take place:
+        // 1. Check that `jsonInput` is a valid json.
+        // 2. Check that it matches the schema described by the `ObjectSchema` type.
+        //    This step is called "Runtime data validation".
+
+        // Replace hardcoded `studentProfileSchema` with the parsed `jsonInput`.
+        return (
+          <>
             <FormBuilder
               schema={studentProfileSchema}
               onSubmit={values => {
                 setSubmittedData(values)
+                // Send data to Firestore here.
               }}
             />
-          </Paper>
-        </Box>
-      </Container>
-      <Dialog
-        open={submittedData !== null}
-        maxWidth="sm"
-        fullWidth
-        onClose={() => setSubmittedData(null)}
-      >
-        <DialogTitle>Submitted form</DialogTitle>
-        <DialogContent>
-          <ReactJson
-            src={submittedData}
-            displayDataTypes={false}
-            displayObjectSize={false}
-            enableClipboard={false}
-            name={null}
-          />
-        </DialogContent>
-      </Dialog>
-    </MuiThemeProvider>
+
+            <ResultDialog
+              data={submittedData}
+              onClose={() => setSubmittedData(null)}
+            />
+          </>
+        )
+      }}
+    />
   )
 }

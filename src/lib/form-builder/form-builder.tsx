@@ -17,6 +17,7 @@ export const FormBuilder = ({ schema, onSubmit }: Props) => {
   return (
     <Paper>
       <Box
+        data-testid="root-form"
         p={2}
         display="flex"
         flexDirection="column"
