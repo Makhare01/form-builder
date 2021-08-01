@@ -3,19 +3,28 @@ import { ObjectSchema } from './types'
 import {useState} from "react"
 
 type Props = {
+  jsonData: string
   schema: ObjectSchema
   onSubmit: (values: any) => void
 }
 
-export const FormBuilder = ({ schema, onSubmit }: Props) => {
-  const [country, setCountry] = useState<any>(null);
+export const FormBuilder = ({ jsonData, schema, onSubmit }: Props) => {
+  const [country, setCountry] = useState<any>('');
 
   const handleChange = (value: any) => {
     setCountry(value);
   };
+  let formJson;
+  try {
+    formJson = JSON.parse(jsonData);
+  } catch(error) {
+    console.log("error is" + error);
+  }
+
 
   return (
     <Paper>
+      {typeof(formJson) !== "undefined" ?
       <Box
         data-testid="root-form"
         p={2}
@@ -28,23 +37,23 @@ export const FormBuilder = ({ schema, onSubmit }: Props) => {
         }}
       >
         <Typography variant="h5" gutterBottom>
-          {schema.label}
+          {formJson.label}
         </Typography>
         {/* Code here */}
-        {schema.properties.map((item, index) => {
+
+        {formJson.properties.map((item: any) => {
           return item.type === "enum" ?
             <FormControl variant="outlined">
               <InputLabel id="demo-simple-select-outlined-label">{item.label}</InputLabel>
               <Select
                 labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
                 value={country}
                 onChange={event => handleChange(event.target.value)}
                 label={item.label}
               >
-                {item.options.map(option => {
+                {item.options.map((option: any) => {
                   return(
-                    <MenuItem value={option.value}>{option.label}</MenuItem>
+                    <MenuItem defaultValue="" value={option.value}>{option.label}</MenuItem>
                   )
                 })}
 
@@ -63,10 +72,9 @@ export const FormBuilder = ({ schema, onSubmit }: Props) => {
               <Typography variant="h5" gutterBottom>
                 {item.label}
               </Typography>
-              {item.item.properties.map(arrItem => {
+              {item.item.properties.map((arrItem: any) => {
                 return(
                 <TextField
-                  id="outlined-password-input"
                   name={arrItem.name}
                   label={arrItem.label}
                   type={arrItem.type}
@@ -78,7 +86,6 @@ export const FormBuilder = ({ schema, onSubmit }: Props) => {
             </Box>
           :
             <TextField
-              id="outlined-password-input"
               name={item.name}
               label={item.label}
               type={item.type}
@@ -92,6 +99,23 @@ export const FormBuilder = ({ schema, onSubmit }: Props) => {
           Submit
         </Button>
       </Box>
+      :
+      <Box
+        data-testid="root-form"
+        p={2}
+        display="flex"
+        flexDirection="column"
+        component="div"
+        onSubmit={event => {
+          // Code here
+          // console.log("submited")
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+         { <p style={{ color: "red", margin: "0px" }}>Invalid Json</p>}
+        </Typography>
+      </Box>
+      }
     </Paper>
   )
 }

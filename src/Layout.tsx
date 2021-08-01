@@ -35,6 +35,7 @@ type Props = {
   render: (jsonInput: string) => ReactNode
 }
 
+
 export const Layout = (props: Props) => {
   const [jsonInput, setJsonInput] = useState(
     JSON.stringify(studentProfileSchemaJson, null, 2),
@@ -48,24 +49,26 @@ export const Layout = (props: Props) => {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Box mb={2}>
-                <ButtonGroup>
-                  <Button
-                    onClick={() => {
-                      setJsonInput(
-                        JSON.stringify(studentProfileSchemaJson, null, 2),
-                      )
-                    }}
-                  >
-                    Student
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setJsonInput(JSON.stringify(testSchemaJson, null, 2))
-                    }}
-                  >
-                    Test
-                  </Button>
-                </ButtonGroup>
+
+                  <ButtonGroup>
+                    <Button
+                      onClick={() => {
+                        setJsonInput(
+                          JSON.stringify(studentProfileSchemaJson, null, 2),
+                        )
+                      }}
+                    >
+                      Student
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setJsonInput(JSON.stringify(testSchemaJson, null, 2))
+                      }}
+                    >
+                      Test
+                    </Button>
+                  </ButtonGroup>
+
               </Box>
               <Paper style={{ overflow: 'auto' }}>
                 <Editor
