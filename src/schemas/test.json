@@ -124,7 +124,7 @@
       "type": "array",
       "name": "array_simple",
       "label": "Array simple",
-      "item": {
+      "item": [{
         "type": "object",
         "name": "object",
         "label": "Object",
@@ -135,14 +135,14 @@
             "label": "String"
           }
         ]
-      }
+      }]
     },
     {
       "type": "array",
       "name": "array_complex",
       "label": "Array complex",
       "required": true,
-      "item": {
+      "item": [{
         "type": "object",
         "name": "object",
         "label": "Object",
@@ -151,7 +151,7 @@
             "type": "array",
             "name": "array_simple",
             "label": "Array simple",
-            "item": {
+            "item": [{
               "type": "object",
               "name": "object",
               "label": "Object",
@@ -162,10 +162,10 @@
                   "label": "String"
                 }
               ]
-            }
+            }]
           }
         ]
-      }
+      }]
     }
   ]
 }

@@ -14,7 +14,7 @@ type Props = {
 export const TypeObject = ({formJson, country, handleChange, submitButton}: Props) => {
 
   return(
-    <Paper>
+    <Paper style={{ marginBottom: "30px" }}>
     {typeof(formJson) !== "undefined" ?
       formJson.type !== "object" ?
       <Box
@@ -36,7 +36,6 @@ export const TypeObject = ({formJson, country, handleChange, submitButton}: Prop
         data-testid="root-form"
         p={2}
         pb={4}
-        // mt={4}
         display="flex"
         flexDirection="column"
         component="form"
@@ -58,8 +57,7 @@ export const TypeObject = ({formJson, country, handleChange, submitButton}: Prop
             <TypeEnum item={item} country={country} handleChange={handleChange} />
           : item.type === "array" ?
             <TypeArray item={item} country={country} handleChange={handleChange} />
-          :
-            item.type === "number" ?
+          : item.type === "number" ?
             <TextField
               name={item.name}
               label={item.label}
