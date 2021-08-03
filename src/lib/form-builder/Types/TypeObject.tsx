@@ -6,12 +6,13 @@ import { TypeArray } from './TypeArray';
 
 type Props = {
   formJson: any,
+  id: string,
   country: string,
   handleChange: (values: any) => void,
   submitButton: boolean,
 }
 
-export const TypeObject = ({formJson, country, handleChange, submitButton}: Props) => {
+export const TypeObject = ({formJson, id, country, handleChange, submitButton}: Props) => {
 
   return(
     <Paper style={{ marginBottom: "30px" }}>
@@ -49,9 +50,9 @@ export const TypeObject = ({formJson, country, handleChange, submitButton}: Prop
         </Typography>
         {/* Code here */}
 
-        {formJson.properties.map((item: any) => {
+        {formJson.properties.map((item: any, index: number) => {
           return item.type === "object" ?
-            <TypeObject formJson={item} country={country} handleChange={handleChange} submitButton={false} />
+            <TypeObject formJson={item} id={"object" + index} country={country} handleChange={handleChange} submitButton={false} />
           :
           item.type === "enum" ?
             <TypeEnum item={item} country={country} handleChange={handleChange} />

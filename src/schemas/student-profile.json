@@ -73,27 +73,8 @@
               "required": true
             }
           ]
-        },
-        {
-          "type": "object",
-          "name": "technology",
-          "properties": [
-            {
-              "type": "string",
-              "label": "Technology 2",
-              "name": "technology 2",
-              "required": true
-            },
-            {
-              "type": "number",
-              "label": "Experience (years) 2",
-              "name": "experience2",
-              "integer": true,
-              "required": true
-            }
-          ]
         }
-    ]
+      ]
     },
     {
       "name": "currentPosition",

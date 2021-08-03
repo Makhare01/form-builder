@@ -27,6 +27,6 @@ export const FormBuilder = ({ jsonData, schema, onSubmit }: Props) => {
 
 
   return (
-    <TypeObject formJson={formJson} country={country} handleChange={handleChange} submitButton={true} />
+    <TypeObject formJson={formJson} id="OBJECT" country={country} handleChange={handleChange} submitButton={true} />
   )
 }
