@@ -1,41 +1,50 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Grid, Paper } from '@material-ui/core'
 import { TypeObject } from './TypeObject';
 
 type Props = {
+  valueHandler: (k: string, values: any) => void,
+  setJsonInput: (values: any) => void,
+  k: string,
+  onSubmit: (values: any) => void,
+  formJson: any,
   item: any,
-  country: string,
-  handleChange: (values: any) => void
+  handleSubmit: (values: any) => void,
+  changeHandler: (values: any) => void,
+  allValues: any,
 }
 
-export const TypeArray = ({item, country, handleChange}: Props) => {
+export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, item, handleSubmit, changeHandler, allValues}: Props) => {
+
   const [objects, setObjects] = useState<any>(item.item);
 
+  console.log(formJson);
+  // setJsonInput(
+  //   JSON.stringify(formJson, null, 2),
+  // )
+
   var uniqid = require('uniqid');
-  let singleObj = objects[0];
+  if(objects.length === 1 && objects[0].id === undefined) objects[0].id = uniqid();
 
-  const handleObject = (objId: any) => {
-    // console.log()
-    singleObj.id = objId;
+  const handleObject = () => {
+    let singleObj = {...item.item[0]};
+    let obj2 = { id: uniqid()};
+    let mergedObj = { ...singleObj, ...obj2 };
+
     let newObjects = objects;
-    newObjects.push(singleObj);
-
-    // newObjects.map((myObj: any) => {
-    //   myObj["id"] = objId;
-    // })
-    setObjects([...newObjects]);
+    newObjects = [...newObjects, mergedObj];
+    item.item = [...item.item, mergedObj];
+    setObjects(newObjects);
   }
 
   const handleDelete = (objId: any) => {
-    console.log(objId)
-    // setObjects([...objects.filter((item: any, i: any) => i != objId)]);
-
-    // const allObjects = objects;
-    // const newObjects = allObjects.filter((item: any) => {
-    //   return item["id"] != objId;
-    // });
-
-    // setObjects([...newObjects]);
+    const allObjects = objects;
+    const newObjects = allObjects.filter((item: any) => {
+      return item["id"] !== objId;
+    });
+    // console.log(objId);
+    item.item = [...newObjects];
+    setObjects([...newObjects]);
   }
 
   return(
@@ -53,26 +62,29 @@ export const TypeArray = ({item, country, handleChange}: Props) => {
       <Typography variant="h5" gutterBottom>
         {item.label}
       </Typography>
-      {objects.map((obj: any, index: number) => {
+      {objects.map((obj: any, index: string) => {
         return(
           <Grid container spacing={3}>
             <Grid item xs={10}>
               <Paper style={{ height: "100%", boxShadow: "none" }}>
-                <TypeObject formJson={obj} id={"object" + index} country={country} handleChange={handleChange} submitButton={false} />
+                <TypeObject valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} formJson={obj} changeHandler={changeHandler} handleSubmit={handleSubmit} allValues={allValues} submitButton={false} />
               </Paper>
             </Grid>
+
             <Grid item xs={2}>
               <Paper style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", boxShadow: "none" }}>
-                <Button style={{ width: "70px" }} onClick={() => handleDelete(index)} variant="outlined" color="secondary">Remove</Button>
-                <p>{obj.id}</p>
+                {objects.length > 1 ?
+                  <Button style={{ width: "70px" }} onClick={() => handleDelete(obj.id)} variant="outlined" color="secondary">Remove</Button>
+                :
+                  <Button style={{ width: "70px" }} variant="outlined" disabled>Remove</Button>
+                }
+                {/* <p>{obj.id}</p> */}
               </Paper>
             </Grid>
           </Grid>
         )
       })}
-      <Button onClick={() => {
-        handleObject(uniqid())
-      }} style={{ width: "70px" }} variant="outlined">Add</Button>
+      <Button onClick={handleObject} style={{ width: "70px" }} variant="outlined">Add</Button>
     </Box>
   )
 }

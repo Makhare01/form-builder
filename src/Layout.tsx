@@ -32,14 +32,16 @@ const theme = createTheme({
 })
 
 type Props = {
-  render: (jsonInput: string) => ReactNode
+  render: (jsonInput: string) => ReactNode,
+  jsonInput: any,
+  setJsonInput: (values: any) => void
 }
 
 
 export const Layout = (props: Props) => {
-  const [jsonInput, setJsonInput] = useState(
-    JSON.stringify(studentProfileSchemaJson, null, 2),
-  )
+  // const [jsonInput, setJsonInput] = useState(
+  //   JSON.stringify(studentProfileSchemaJson, null, 2),
+  // )
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -53,7 +55,7 @@ export const Layout = (props: Props) => {
                   <ButtonGroup>
                     <Button
                       onClick={() => {
-                        setJsonInput(
+                        props.setJsonInput(
                           JSON.stringify(studentProfileSchemaJson, null, 2),
                         )
                       }}
@@ -62,7 +64,7 @@ export const Layout = (props: Props) => {
                     </Button>
                     <Button
                       onClick={() => {
-                        setJsonInput(JSON.stringify(testSchemaJson, null, 2))
+                        props.setJsonInput(JSON.stringify(testSchemaJson, null, 2))
                       }}
                     >
                       Test
@@ -72,8 +74,8 @@ export const Layout = (props: Props) => {
               </Box>
               <Paper style={{ overflow: 'auto' }}>
                 <Editor
-                  value={jsonInput}
-                  onValueChange={setJsonInput}
+                  value={props.jsonInput}
+                  onValueChange={props.setJsonInput}
                   highlight={code => highlight(code, languages['json'], 'json')}
                   padding={10}
                   style={{
@@ -84,7 +86,7 @@ export const Layout = (props: Props) => {
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Paper>{props.render(jsonInput)}</Paper>
+              <Paper>{props.render(props.jsonInput)}</Paper>
             </Grid>
           </Grid>
         </Box>

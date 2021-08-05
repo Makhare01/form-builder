@@ -3,12 +3,19 @@ import { useState } from 'react'
 import { Layout } from 'Layout'
 import { studentProfileSchema } from 'schemas/student-profile'
 import { ResultDialog } from 'ResultDialog'
+import studentProfileSchemaJson from 'schemas/student-profile.json'
 
 export const App = () => {
   const [submittedData, setSubmittedData] = useState<any>(null)
 
+  const [jsonInput, setJsonInput] = useState(
+    JSON.stringify(studentProfileSchemaJson, null, 2),
+  )
+
   return (
     <Layout
+      jsonInput={jsonInput}
+      setJsonInput={setJsonInput}
       render={jsonInput => {
         // `jsonInput` is a raw string. You need to convert it to the object of `ObjectSchema` type.
         // There are two types of validations that must take place:
@@ -22,6 +29,7 @@ export const App = () => {
             <FormBuilder
               jsonData={jsonInput}
               schema={studentProfileSchema}
+              setJsonInput={setJsonInput}
               onSubmit={values => {
                 setSubmittedData(values)
                 // Send data to Firestore here.
