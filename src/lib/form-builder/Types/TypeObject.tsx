@@ -10,13 +10,10 @@ type Props = {
   k: string,
   onSubmit: (values: any) => void,
   formJson: any,
-  handleSubmit: (values: any) => void,
-  changeHandler: (values: any) => void,
-  allValues: any,
   submitButton: boolean,
 }
 
-export const TypeObject = ({k, valueHandler, setJsonInput, onSubmit, formJson, handleSubmit, changeHandler, allValues, submitButton}: Props) => {
+export const TypeObject = ({k, valueHandler, setJsonInput, onSubmit, formJson, submitButton}: Props) => {
 
   return(
     <Paper style={{ marginBottom: "30px" }}>
@@ -26,7 +23,6 @@ export const TypeObject = ({k, valueHandler, setJsonInput, onSubmit, formJson, h
         pl={2}
         pr={2}
         pb={4}
-        // my={4}
         display="flex"
         flexDirection="column"
         component="div"
@@ -44,14 +40,11 @@ export const TypeObject = ({k, valueHandler, setJsonInput, onSubmit, formJson, h
         display="flex"
         flexDirection="column"
         component="form"
-        id="FORM"
         onSubmit={
-        //   event => {
-        //   Code here
-        //   console.log(allValues);
-        // }
-        handleSubmit
-      }
+          event => {
+            onSubmit(formJson);
+            // handleSubmit
+      }}
       >
         <Typography variant="h5" gutterBottom>
           {formJson.label}
@@ -59,76 +52,60 @@ export const TypeObject = ({k, valueHandler, setJsonInput, onSubmit, formJson, h
 
         {formJson.properties.map((item: any, index: string) => {
           return item.type === "object" ?
-            <TypeObject valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} changeHandler={changeHandler} handleSubmit={handleSubmit} allValues={allValues} formJson={item} submitButton={false} />
+            <TypeObject key={"obj"+index} valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} formJson={item} submitButton={false} />
           :
           item.type === "enum" ?
-            <TypeEnum valueHandler={valueHandler} item={item} allVals={allValues} k={k+"."+index} handleValue={changeHandler} />
+            <TypeEnum key={"enum"+index} valueHandler={valueHandler} item={item} k={k+"."+index} />
           : item.type === "array" ?
-            <TypeArray valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} formJson={formJson} changeHandler={changeHandler} handleSubmit={handleSubmit} allValues={allValues} item={item} />
+            <TypeArray key={"arr"+index} valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} formJson={formJson} item={item} />
           : item.type === "number" ?
           <>
             <TextField
-              // id={k}
-              className="INPUT"
+              key={"number"+index}
               name={item.name}
               label={item.label}
               type={item.type}
               required={item.required}
-              // value={allValues[item.name]}
-              // value={item.value}
               inputProps={{
                 min: item.minimum,
                 max: item.maximum,
               }}
               variant="outlined"
-              // onChange={changeHandler}
               onChange={(e) => valueHandler(k+"."+index, e.target.value)}
             />
           </>
           :
             item.type === "string" && item.name === "phone" ?
             <TextField
-              // id={k}
-              className="INPUT"
+              key={"string"+index}
               name={item.name}
               label={item.label}
               type={item.inputType}
               required={item.required}
-              // value={allValues[item.name]}
-              // value={item.value}
               inputProps={{
                 pattern: item.pattern,
                 minLength: item.minLength,
                 maxLength: item.maxLength,
               }}
               variant="outlined"
-              // onChange={changeHandler}
               onChange={(e) => valueHandler(k+"."+index, e.target.value)}
             />
           : item.type === "boolean" ?
             <FormControlLabel
-              // value={allValues[item.name]}
-              className="INPUT"
-              // onChange={(e: any) => {
-              //   item.value = e.target.value
-              // }}
-              control={<Checkbox className="INPUT" onChange={(e) => valueHandler(k+"."+index, e.target.checked)} name={item.type} color="primary"/>}
+              key={"boolean"+index}
+              control={<Checkbox value="no" onChange={(e) => valueHandler(k+"."+index, e.target.checked)} name={item.type} color="primary"/>}
               label={item.label}
               labelPlacement="end"
             />
           :
             <TextField
-              // id={k}
-              className="INPUT"
+              key={"input"+index}
               name={item.name}
               label={item.label}
               type={item.type}
               required={item.required}
               multiline={item.multiline}
-              // value={allValues[item.name]}
-              // value={item.value}
               variant="outlined"
-              // onChange={changeHandler}
               onChange={(e) => valueHandler(k+"."+index, e.target.value)}
             />
         })}

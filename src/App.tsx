@@ -7,6 +7,7 @@ import studentProfileSchemaJson from 'schemas/student-profile.json'
 
 export const App = () => {
   const [submittedData, setSubmittedData] = useState<any>(null)
+  // console.log(submittedData);
 
   const [jsonInput, setJsonInput] = useState(
     JSON.stringify(studentProfileSchemaJson, null, 2),

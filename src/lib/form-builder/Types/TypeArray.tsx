@@ -9,19 +9,13 @@ type Props = {
   onSubmit: (values: any) => void,
   formJson: any,
   item: any,
-  handleSubmit: (values: any) => void,
-  changeHandler: (values: any) => void,
-  allValues: any,
 }
 
-export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, item, handleSubmit, changeHandler, allValues}: Props) => {
+export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, item}: Props) => {
 
   const [objects, setObjects] = useState<any>(item.item);
 
-  console.log(formJson);
-  // setJsonInput(
-  //   JSON.stringify(formJson, null, 2),
-  // )
+  // console.log(formJson);
 
   var uniqid = require('uniqid');
   if(objects.length === 1 && objects[0].id === undefined) objects[0].id = uniqid();
@@ -38,13 +32,18 @@ export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, it
   }
 
   const handleDelete = (objId: any) => {
-    const allObjects = objects;
-    const newObjects = allObjects.filter((item: any) => {
-      return item["id"] !== objId;
-    });
-    // console.log(objId);
-    item.item = [...newObjects];
-    setObjects([...newObjects]);
+    // const allObjects = [...objects];
+    // const newObjects = allObjects.filter((item: any) => {
+    //   return item["id"] !== objId;
+    // });
+
+    var iindex = item.item.map((x: any) => {
+      return x.id
+    }).indexOf(objId);
+
+    item.item.splice(iindex, 1);
+
+    setObjects([...item.item]);
   }
 
   return(
@@ -67,7 +66,7 @@ export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, it
           <Grid container spacing={3}>
             <Grid item xs={10}>
               <Paper style={{ height: "100%", boxShadow: "none" }}>
-                <TypeObject valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} formJson={obj} changeHandler={changeHandler} handleSubmit={handleSubmit} allValues={allValues} submitButton={false} />
+                <TypeObject key={"obj-in"+index} valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} formJson={obj} submitButton={false} />
               </Paper>
             </Grid>
 
@@ -78,7 +77,7 @@ export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, it
                 :
                   <Button style={{ width: "70px" }} variant="outlined" disabled>Remove</Button>
                 }
-                {/* <p>{obj.id}</p> */}
+                <p>{obj.id}</p>
               </Paper>
             </Grid>
           </Grid>
