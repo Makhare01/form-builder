@@ -7,14 +7,13 @@ import { TypeArray } from './TypeArray';
 type Props = {
   valueHandler: (k: string, values: any) => void,
   k: string,
+  dir: string,
   onSubmit: (values: any) => void,
   formJson: any,
   submitButton: boolean,
 }
 
-export const TypeObject = ({k, valueHandler, onSubmit, formJson, submitButton}: Props) => {
-
-  // const input =  document.getElementById(k+"."+index);
+export const TypeObject = ({k, dir, valueHandler, onSubmit, formJson, submitButton}: Props) => {
 
   return(
     <Paper style={{ marginBottom: "30px" }}>
@@ -45,7 +44,6 @@ export const TypeObject = ({k, valueHandler, onSubmit, formJson, submitButton}: 
           event => {
             event.preventDefault();
             onSubmit(formJson);
-            // handleSubmit
       }}
       >
         <Typography variant="h5" gutterBottom>
@@ -54,14 +52,13 @@ export const TypeObject = ({k, valueHandler, onSubmit, formJson, submitButton}: 
 
         {formJson.properties.map((item: any, index: string) => {
           return item.type === "object" ?
-            <TypeObject key={"obj"+index} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} formJson={item} submitButton={false} />
+            <TypeObject key={"obj"+index} dir={dir+" -> "+item.label} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} formJson={item} submitButton={false} />
           :
           item.type === "enum" ?
             <TypeEnum key={"enum"+index} valueHandler={valueHandler} item={item} k={k+"."+index} />
           : item.type === "array" ?
-            <TypeArray key={"arr"+index} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} item={item} />
+            <TypeArray key={"arr"+index} dir={dir+" -> "+item.label} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} item={item} />
           : item.type === "number" ?
-          <>
             <TextField
               key={k+"."+index}
               value={item.value}
@@ -76,7 +73,6 @@ export const TypeObject = ({k, valueHandler, onSubmit, formJson, submitButton}: 
               variant="outlined"
               onChange={(e) => valueHandler(k+"."+index, e.target.value)}
             />
-          </>
           :
             item.type === "string" && item.name === "phone" ?
             <TextField
@@ -102,7 +98,7 @@ export const TypeObject = ({k, valueHandler, onSubmit, formJson, submitButton}: 
               label={item.label}
               labelPlacement="end"
             />
-          :
+          : item.type === "string" ?
             <TextField
               key={k+"."+index}
               name={item.name}
@@ -114,6 +110,23 @@ export const TypeObject = ({k, valueHandler, onSubmit, formJson, submitButton}: 
               variant="outlined"
               onChange={(e) => valueHandler(k+"."+index, e.target.value)}
             />
+          :
+          <Box
+            pl={2}
+            pr={2}
+            // pb={4}
+            border={1}
+            borderColor="grey.400"
+            borderRadius={4}
+            display="flex"
+            flexDirection="column"
+            component="div"
+          >
+            <Typography variant="h5" gutterBottom>
+            { <p style={{ color: "red", margin: "0px" }}>Input type error</p>}
+            { <p style={{ marginTop: "15px", fontSize: "16px" }}>invalid input type <span style={{ color: "red" }}>"{item.type}"</span> in [<span style={{ color: "green" }}>{dir} - {item.label}</span>] </p>}
+            </Typography>
+          </Box>
         })}
         {submitButton ?
           <Button style={{ marginTop: "30px" }}

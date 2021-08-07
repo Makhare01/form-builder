@@ -44,9 +44,10 @@ export const FormBuilder = ({ setJsonInput, jsonData, onSubmit }: Props) => {
     )
   }
 
-
+  // console.log("in!");
+  let dir = formJson.label;
 
   return (
-    <TypeObject k={k} valueHandler={valueHandler} onSubmit={onSubmit} formJson={formJson}   submitButton={true} /> // Whole object
+    <TypeObject k={k} dir={dir} valueHandler={valueHandler} onSubmit={onSubmit} formJson={formJson}  submitButton={true} /> // Whole object
   )
 }

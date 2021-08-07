@@ -5,11 +5,12 @@ import { TypeObject } from './TypeObject';
 type Props = {
   valueHandler: (k: string, values: any) => void,
   k: string,
+  dir: string,
   onSubmit: (values: any) => void,
   item: any,
 }
 
-export const TypeArray = ({k, valueHandler, onSubmit, item}: Props) => {
+export const TypeArray = ({k, dir, valueHandler, onSubmit, item}: Props) => {
 
   const [objects, setObjects] = useState<any>(item.item);
 
@@ -62,10 +63,10 @@ export const TypeArray = ({k, valueHandler, onSubmit, item}: Props) => {
       mt={4}
       border={1}
       borderColor="grey.400"
+      borderRadius={4}
       display="flex"
       flexDirection="column"
       component="div"
-      borderRadius={4}
     >
       <Typography variant="h5" gutterBottom>
         {item.label}
@@ -75,14 +76,14 @@ export const TypeArray = ({k, valueHandler, onSubmit, item}: Props) => {
           <Grid container spacing={3}>
             <Grid item xs={10}>
               <Paper style={{ height: "100%", boxShadow: "none" }}>
-                <TypeObject key={"obj-in"+index} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} formJson={obj} submitButton={false} />
+                <TypeObject dir={dir+" -> "+obj.label} key={"obj-in"+index} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} formJson={obj} submitButton={false} />
               </Paper>
             </Grid>
 
             <Grid item xs={2}>
               <Paper style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", boxShadow: "none" }}>
                 <Button style={{ width: "70px" }} onClick={() => handleDelete(obj.id)} variant="outlined" color="secondary" disabled={item.item.length > 1 ? false : true}>Remove</Button>
-                <p>{obj.id}</p>
+                {/* <p>{obj.id}</p> */}
               </Paper>
             </Grid>
           </Grid>

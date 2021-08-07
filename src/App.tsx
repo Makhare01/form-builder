@@ -5,6 +5,9 @@ import { studentProfileSchema } from 'schemas/student-profile'
 import { ResultDialog } from 'ResultDialog'
 import studentProfileSchemaJson from 'schemas/student-profile.json'
 
+// Firebase
+import firebase from "./utils/firebase";
+
 export const App = () => {
   const [submittedData, setSubmittedData] = useState<any>(null)
 
@@ -68,6 +71,8 @@ export const App = () => {
                 console.log("json: ", Json)
                 setSubmittedData(Json)
                 // Send data to Firestore here.
+                const formRef = firebase.database().ref("Form");
+                formRef.push(Json);
               }}
             />
 
