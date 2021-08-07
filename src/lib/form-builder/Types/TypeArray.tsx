@@ -4,26 +4,40 @@ import { TypeObject } from './TypeObject';
 
 type Props = {
   valueHandler: (k: string, values: any) => void,
-  setJsonInput: (values: any) => void,
   k: string,
   onSubmit: (values: any) => void,
-  formJson: any,
   item: any,
 }
 
-export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, item}: Props) => {
+export const TypeArray = ({k, valueHandler, onSubmit, item}: Props) => {
 
   const [objects, setObjects] = useState<any>(item.item);
 
-  // console.log(formJson);
-
   var uniqid = require('uniqid');
-  if(objects.length === 1 && objects[0].id === undefined) objects[0].id = uniqid();
+  if(item.item.length === 1 && item.item[0].id === undefined) item.item[0].id = uniqid();
+
+  const removeValues = (singleObj: any) => {
+    if(singleObj.type === "object") {
+      singleObj["properties"].map((obj: any) => {
+        if(obj.type === "array") removeValues(obj)
+        else  obj.value = ""
+      })
+    } else if(singleObj.type === "array") {
+      singleObj["item"].map((obj: any) => {
+        if(obj.type === "array") removeValues(obj)
+        else  obj["properties"].map((i: any) => {
+          i.value = ""
+        })
+      })
+    }
+  }
 
   const handleObject = () => {
-    let singleObj = {...item.item[0]};
+    let singleObj = JSON.parse(JSON.stringify(item.item[0]));
     let obj2 = { id: uniqid()};
     let mergedObj = { ...singleObj, ...obj2 };
+
+    removeValues(singleObj);
 
     let newObjects = objects;
     newObjects = [...newObjects, mergedObj];
@@ -32,11 +46,6 @@ export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, it
   }
 
   const handleDelete = (objId: any) => {
-    // const allObjects = [...objects];
-    // const newObjects = allObjects.filter((item: any) => {
-    //   return item["id"] !== objId;
-    // });
-
     var iindex = item.item.map((x: any) => {
       return x.id
     }).indexOf(objId);
@@ -61,22 +70,18 @@ export const TypeArray = ({k, valueHandler, setJsonInput, onSubmit, formJson, it
       <Typography variant="h5" gutterBottom>
         {item.label}
       </Typography>
-      {objects.map((obj: any, index: string) => {
+      {item.item.map((obj: any, index: string) => {
         return(
           <Grid container spacing={3}>
             <Grid item xs={10}>
               <Paper style={{ height: "100%", boxShadow: "none" }}>
-                <TypeObject key={"obj-in"+index} valueHandler={valueHandler} setJsonInput={setJsonInput} k={k+"."+index} onSubmit={onSubmit} formJson={obj} submitButton={false} />
+                <TypeObject key={"obj-in"+index} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} formJson={obj} submitButton={false} />
               </Paper>
             </Grid>
 
             <Grid item xs={2}>
               <Paper style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", boxShadow: "none" }}>
-                {objects.length > 1 ?
-                  <Button style={{ width: "70px" }} onClick={() => handleDelete(obj.id)} variant="outlined" color="secondary">Remove</Button>
-                :
-                  <Button style={{ width: "70px" }} variant="outlined" disabled>Remove</Button>
-                }
+                <Button style={{ width: "70px" }} onClick={() => handleDelete(obj.id)} variant="outlined" color="secondary" disabled={item.item.length > 1 ? false : true}>Remove</Button>
                 <p>{obj.id}</p>
               </Paper>
             </Grid>

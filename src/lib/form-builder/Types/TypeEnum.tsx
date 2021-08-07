@@ -12,7 +12,6 @@ export const TypeEnum = ({k, valueHandler, item}: Props) => {
     <FormControl variant="outlined">
       <InputLabel>{item.label}</InputLabel>
       <Select
-        id="country"
         type={item.type}
         name={item.name}
         defaultValue=""
@@ -22,7 +21,7 @@ export const TypeEnum = ({k, valueHandler, item}: Props) => {
       >
         {item.options.map((option: any, index: number) => {
           return(
-            <MenuItem key={"opt"+index} defaultValue="" id={item.name+index} value={option.value}>{option.label}</MenuItem>
+            <MenuItem key={"opt"+index} defaultValue="" value={option.value}>{option.label}</MenuItem>
           )
         })}
 
