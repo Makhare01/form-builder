@@ -71,6 +71,7 @@ export const App = () => {
                 console.log("json: ", Json)
                 setSubmittedData(Json)
                 // Send data to Firestore here.
+                // if(!alert('Alert For your User!')){window.location.reload();}
                 const formRef = firebase.database().ref("Form");
                 formRef.push(Json);
               }}

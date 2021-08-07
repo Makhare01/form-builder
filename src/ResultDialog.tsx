@@ -12,7 +12,10 @@ export const ResultDialog = (props: Props) => {
       open={props.data !== null}
       maxWidth="sm"
       fullWidth
-      onClose={props.onClose}
+      onClose={() => {
+        if(!alert('Form is submited to firebase!')){window.location.reload();}
+        props.onClose;
+      }}
     >
       <DialogTitle>Submitted form</DialogTitle>
       <DialogContent>
