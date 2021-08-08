@@ -13,12 +13,12 @@ type Props = {
   submitButton: boolean,
 }
 
-export const TypeObject = ({k, dir, valueHandler, onSubmit, formJson, submitButton}: Props) => {
+export const TypeObject = ({k, dir, valueHandler, onSubmit, formJson, submitButton}: Props) => { // component for Object type
 
   return(
     <Paper style={{ marginBottom: "30px" }}>
     {typeof(formJson) !== "undefined" ?
-      formJson.type !== "object" ?
+      formJson.type !== "object" ? // when isn't object outputs error
       <Box
         pl={2}
         pr={2}
@@ -43,7 +43,7 @@ export const TypeObject = ({k, dir, valueHandler, onSubmit, formJson, submitButt
         onSubmit={
           event => {
             event.preventDefault();
-            onSubmit(formJson);
+            onSubmit(formJson); // submit data
       }}
       >
         <Typography variant="h5" gutterBottom>
@@ -51,12 +51,12 @@ export const TypeObject = ({k, dir, valueHandler, onSubmit, formJson, submitButt
         </Typography>
 
         {formJson.properties.map((item: any, index: string) => {
-          return item.type === "object" ?
+          return item.type === "object" ? // when type is object works recursion
             <TypeObject key={"obj"+index} dir={dir+" -> "+item.label} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} formJson={item} submitButton={false} />
           :
-          item.type === "enum" ?
+          item.type === "enum" ? // when type is enum (enum component)
             <TypeEnum key={"enum"+index} valueHandler={valueHandler} item={item} k={k+"."+index} />
-          : item.type === "array" ?
+          : item.type === "array" ? // when type is arrar (array component)
             <TypeArray key={"arr"+index} dir={dir+" -> "+item.label} valueHandler={valueHandler} k={k+"."+index} onSubmit={onSubmit} item={item} />
           : item.type === "number" ?
             <TextField
@@ -111,7 +111,7 @@ export const TypeObject = ({k, dir, valueHandler, onSubmit, formJson, submitButt
               onChange={(e) => valueHandler(k+"."+index, e.target.value)}
             />
           :
-          <Box
+          <Box // when input tupe isn't valid
             pl={2}
             pr={2}
             // pb={4}

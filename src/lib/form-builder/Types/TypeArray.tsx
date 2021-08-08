@@ -10,14 +10,14 @@ type Props = {
   item: any,
 }
 
-export const TypeArray = ({k, dir, valueHandler, onSubmit, item}: Props) => {
+export const TypeArray = ({k, dir, valueHandler, onSubmit, item}: Props) => { // component for array type
 
   const [objects, setObjects] = useState<any>(item.item);
 
-  var uniqid = require('uniqid');
-  if(item.item.length === 1 && item.item[0].id === undefined) item.item[0].id = uniqid();
+  var uniqid = require('uniqid'); // generate unique id
+  if(item.item.length === 1 && item.item[0].id === undefined) item.item[0].id = uniqid(); // set array first item uniq id
 
-  const removeValues = (singleObj: any) => {
+  const removeValues = (singleObj: any) => { // remove copied item input values
     if(singleObj.type === "object") {
       singleObj["properties"].map((obj: any) => {
         if(obj.type === "array") removeValues(obj)
@@ -33,9 +33,9 @@ export const TypeArray = ({k, dir, valueHandler, onSubmit, item}: Props) => {
     }
   }
 
-  const handleObject = () => {
+  const handleObject = () => { // add (copy) new array item
     let singleObj = JSON.parse(JSON.stringify(item.item[0]));
-    let obj2 = { id: uniqid()};
+    let obj2 = { id: uniqid()}; // set new item unique id
     let mergedObj = { ...singleObj, ...obj2 };
 
     removeValues(singleObj);
@@ -46,7 +46,7 @@ export const TypeArray = ({k, dir, valueHandler, onSubmit, item}: Props) => {
     setObjects(newObjects);
   }
 
-  const handleDelete = (objId: any) => {
+  const handleDelete = (objId: any) => { // remove array element
     var iindex = item.item.map((x: any) => {
       return x.id
     }).indexOf(objId);
@@ -82,14 +82,13 @@ export const TypeArray = ({k, dir, valueHandler, onSubmit, item}: Props) => {
 
             <Grid item xs={2}>
               <Paper style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", boxShadow: "none" }}>
-                <Button style={{ width: "70px" }} onClick={() => handleDelete(obj.id)} variant="outlined" color="secondary" disabled={item.item.length > 1 ? false : true}>Remove</Button>
-                {/* <p>{obj.id}</p> */}
+                <Button style={{ width: "70px" }} onClick={() => handleDelete(obj.id)} variant="outlined" color="secondary" disabled={item.item.length > 1 ? false : true}>Remove</Button> // remove button
               </Paper>
             </Grid>
           </Grid>
         )
       })}
-      <Button onClick={handleObject} style={{ width: "70px" }} variant="outlined">Add</Button>
+      <Button onClick={handleObject} style={{ width: "70px" }} variant="outlined">Add</Button> // add button
     </Box>
   )
 }

@@ -13,7 +13,7 @@ export const ResultDialog = (props: Props) => {
       maxWidth="sm"
       fullWidth
       onClose={() => {
-        if(!alert('Form is submited to firebase!')){window.location.reload();}
+        if(!alert('Form is submited to firebase!')){window.location.reload();} // refresh page after data submit
         props.onClose;
       }}
     >

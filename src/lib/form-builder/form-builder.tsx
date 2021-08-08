@@ -10,16 +10,17 @@ type Props = {
 }
 
 export const FormBuilder = ({ setJsonInput, jsonData, onSubmit }: Props) => {
+
   let formJson: any = {};
-  try {
+  try { //chack json
     formJson = JSON.parse(jsonData);
   } catch(error) {
     console.log("error is" + error);
   }
 
-  let k = "";
+  let k = ""; // k index
 
-  const valueHandler = (index: string, value: any) => {
+  const valueHandler = (index: string, value: any) => { // take value and set to Json
     let objIndex = index.substring(1);
     const myArr = objIndex.split(".");
 
@@ -30,8 +31,6 @@ export const FormBuilder = ({ setJsonInput, jsonData, onSubmit }: Props) => {
         else if (TMP.type === "object") TMP = TMP.properties[parseInt(myArr[i])];
       }
     }
-
-    // let obj2 = { value: value};
 
     if(TMP.type === "boolean") {
       if(value === true) TMP.value = "yes";
@@ -44,8 +43,7 @@ export const FormBuilder = ({ setJsonInput, jsonData, onSubmit }: Props) => {
     )
   }
 
-  // console.log("in!");
-  let dir = formJson.label;
+  let dir = formJson.label; // object direction
 
   return (
     <TypeObject k={k} dir={dir} valueHandler={valueHandler} onSubmit={onSubmit} formJson={formJson}  submitButton={true} /> // Whole object

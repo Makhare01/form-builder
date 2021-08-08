@@ -7,7 +7,8 @@ type Props = {
   item: any,
 }
 
-export const TypeEnum = ({k, valueHandler, item}: Props) => {
+// Enum type component
+export const TypeEnum = ({k, valueHandler, item}: Props) => { // component for Enum type
   return(
     <FormControl variant="outlined">
       <InputLabel>{item.label}</InputLabel>
